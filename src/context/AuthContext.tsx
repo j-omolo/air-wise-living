@@ -1,12 +1,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, sampleUsers } from '@/utils/airQualityData';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  register: (name: string, email: string, password: string) => Promise<boolean>;
   isAuthenticated: boolean;
   isAdmin: boolean;
 }
@@ -65,6 +66,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return false;
   };
 
+  // Register function - in a real app this would create a user in a secure backend
+  const register = async (name: string, email: string, password: string): Promise<boolean> => {
+    // Check if email is already in use
+    const emailExists = sampleUsers.some(u => u.email.toLowerCase() === email.toLowerCase());
+    
+    if (emailExists) {
+      toast({
+        title: "Registration failed",
+        description: "This email is already in use.",
+        variant: "destructive",
+      });
+      
+      return false;
+    }
+    
+    // In a real app, you would hash the password and store the user in a database
+    const newUser: User = {
+      id: `user-${Date.now()}`,
+      name,
+      email,
+      role: 'user', // Default role is user
+      preferences: {
+        favoriteLocations: [],
+        healthConditions: [],
+        notifications: false
+      }
+    };
+    
+    // Update our sample users array (in a real app, this would be a database insert)
+    // Note: This is just for demo purposes. In a real app, this would persist to a database.
+    sampleUsers.push(newUser);
+    
+    // Auto-login the new user
+    setUser(newUser);
+    localStorage.setItem('airwise_user', JSON.stringify(newUser));
+    
+    toast({
+      title: "Registration successful",
+      description: `Welcome to AirWise, ${name}!`,
+    });
+    
+    return true;
+  };
+
   // Logout function
   const logout = () => {
     setUser(null);
@@ -83,6 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     login,
     logout,
+    register,
     isAuthenticated,
     isAdmin,
   };
