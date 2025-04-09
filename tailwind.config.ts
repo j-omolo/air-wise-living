@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Air quality specific colors
+				aqi: {
+					good: '#22C55E',        // Green - Good air quality
+					moderate: '#FACC15',    // Yellow - Moderate air quality
+					unhealthy: '#FB923C',   // Orange - Unhealthy for sensitive groups
+					bad: '#EF4444',         // Red - Unhealthy
+					veryBad: '#9F1239',     // Dark Red - Very unhealthy
+					hazardous: '#7F1D1D',   // Darker Red - Hazardous
 				}
 			},
 			borderRadius: {
@@ -84,11 +94,16 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-opacity': {
+					'0%, 100%': { opacity: '0.6' },
+					'50%': { opacity: '1' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-opacity': 'pulse-opacity 2s ease-in-out infinite'
 			}
 		}
 	},
