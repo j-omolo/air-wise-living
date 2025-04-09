@@ -1,4 +1,3 @@
-
 // This file contains mock air quality data and related utilities for the app
 // In a real application, this would be replaced with API calls to air quality services
 
@@ -114,6 +113,16 @@ export const availableLocations = [
   'Austin, TX',
   'Boston, MA',
   'Portland, OR',
+  'Cairo, Egypt',
+  'Lagos, Nigeria',
+  'Nairobi, Kenya',
+  'Cape Town, South Africa',
+  'Accra, Ghana',
+  'Casablanca, Morocco',
+  'Dar es Salaam, Tanzania',
+  'Dakar, Senegal',
+  'Addis Ababa, Ethiopia',
+  'Johannesburg, South Africa',
 ];
 
 // Sample air quality data for different locations
@@ -220,4 +229,113 @@ export const airQualityByLocation: Record<string, AirQualityData> = {
       { name: 'CO', value: 1.8, unit: 'ppm', level: 'moderate' },
     ],
   },
+  'Cairo, Egypt': {
+    ...sampleAirQualityData,
+    location: 'Cairo, Egypt',
+    aqi: 157,
+    category: 'unhealthy',
+    mainPollutant: 'PM10',
+    healthImplications: getHealthImplications('unhealthy'),
+    recommendations: getRecommendations('unhealthy'),
+    pollutants: [
+      { name: 'PM2.5', value: 42.8, unit: 'μg/m³', level: 'high' },
+      { name: 'PM10', value: 122.5, unit: 'μg/m³', level: 'high' },
+      { name: 'O3', value: 54, unit: 'ppb', level: 'moderate' },
+      { name: 'NO2', value: 68, unit: 'ppb', level: 'high' },
+      { name: 'SO2', value: 15, unit: 'ppb', level: 'moderate' },
+      { name: 'CO', value: 1.8, unit: 'ppm', level: 'moderate' },
+    ],
+  },
+  'Lagos, Nigeria': {
+    ...sampleAirQualityData,
+    location: 'Lagos, Nigeria',
+    aqi: 132,
+    category: 'unhealthy-sensitive',
+    mainPollutant: 'PM2.5',
+    healthImplications: getHealthImplications('unhealthy-sensitive'),
+    recommendations: getRecommendations('unhealthy-sensitive'),
+    pollutants: [
+      { name: 'PM2.5', value: 47.5, unit: 'μg/m³', level: 'high' },
+      { name: 'PM10', value: 89.2, unit: 'μg/m³', level: 'moderate' },
+      { name: 'O3', value: 39, unit: 'ppb', level: 'low' },
+      { name: 'NO2', value: 35, unit: 'ppb', level: 'moderate' },
+      { name: 'SO2', value: 12, unit: 'ppb', level: 'moderate' },
+      { name: 'CO', value: 2.1, unit: 'ppm', level: 'moderate' },
+    ],
+  },
+  'Nairobi, Kenya': {
+    ...sampleAirQualityData,
+    location: 'Nairobi, Kenya',
+    aqi: 78,
+    category: 'moderate',
+    mainPollutant: 'PM2.5',
+    healthImplications: getHealthImplications('moderate'),
+    recommendations: getRecommendations('moderate'),
+    pollutants: [
+      { name: 'PM2.5', value: 22.7, unit: 'μg/m³', level: 'moderate' },
+      { name: 'PM10', value: 42.3, unit: 'μg/m³', level: 'moderate' },
+      { name: 'O3', value: 48, unit: 'ppb', level: 'moderate' },
+      { name: 'NO2', value: 28, unit: 'ppb', level: 'low' },
+      { name: 'SO2', value: 7, unit: 'ppb', level: 'low' },
+      { name: 'CO', value: 0.9, unit: 'ppm', level: 'low' },
+    ],
+  },
+  'Cape Town, South Africa': {
+    ...sampleAirQualityData,
+    location: 'Cape Town, South Africa',
+    aqi: 42,
+    category: 'good',
+    mainPollutant: 'O3',
+    healthImplications: getHealthImplications('good'),
+    recommendations: getRecommendations('good'),
+    pollutants: [
+      { name: 'PM2.5', value: 8.6, unit: 'μg/m³', level: 'low' },
+      { name: 'PM10', value: 18.9, unit: 'μg/m³', level: 'low' },
+      { name: 'O3', value: 42, unit: 'ppb', level: 'low' },
+      { name: 'NO2', value: 14, unit: 'ppb', level: 'low' },
+      { name: 'SO2', value: 3, unit: 'ppb', level: 'low' },
+      { name: 'CO', value: 0.3, unit: 'ppm', level: 'low' },
+    ],
+  },
+  'Accra, Ghana': {
+    ...sampleAirQualityData,
+    location: 'Accra, Ghana',
+    aqi: 110,
+    category: 'unhealthy-sensitive',
+    mainPollutant: 'PM2.5',
+    healthImplications: getHealthImplications('unhealthy-sensitive'),
+    recommendations: getRecommendations('unhealthy-sensitive'),
+    pollutants: [
+      { name: 'PM2.5', value: 35.8, unit: 'μg/m³', level: 'moderate' },
+      { name: 'PM10', value: 76.2, unit: 'μg/m³', level: 'moderate' },
+      { name: 'O3', value: 52, unit: 'ppb', level: 'moderate' },
+      { name: 'NO2', value: 32, unit: 'ppb', level: 'moderate' },
+      { name: 'SO2', value: 9, unit: 'ppb', level: 'low' },
+      { name: 'CO', value: 1.5, unit: 'ppm', level: 'moderate' },
+    ],
+  },
 };
+
+// User roles and permissions
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'user';
+}
+
+// Sample users for demonstration
+export const sampleUsers: User[] = [
+  {
+    id: '1',
+    email: 'admin@airwise.com',
+    name: 'Admin User',
+    role: 'admin',
+  },
+  {
+    id: '2',
+    email: 'user@example.com',
+    name: 'Regular User',
+    role: 'user',
+  }
+];

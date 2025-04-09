@@ -6,12 +6,36 @@ import PollutantLevels from '@/components/PollutantLevels';
 import HealthRecommendations from '@/components/HealthRecommendations';
 import DashboardCard from '@/components/DashboardCard';
 import LocationSelector from '@/components/LocationSelector';
-import { Cloud, RefreshCw } from 'lucide-react';
+import AdminDashboard from '@/components/AdminDashboard';
+import { useAuth } from '@/context/AuthContext';
+import { Cloud, LogOut, RefreshCw, Settings, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 
 const Index = () => {
   const [selectedLocation, setSelectedLocation] = useState(sampleAirQualityData.location);
   const [refreshing, setRefreshing] = useState(false);
+  const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  const navigate = useNavigate();
+
+  // If user is not authenticated, redirect to login
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!isAuthenticated) {
+    return null; // Don't render anything while redirecting
+  }
 
   // Get the air quality data for the selected location
   const airQualityData = airQualityByLocation[selectedLocation] || sampleAirQualityData;
@@ -49,6 +73,34 @@ const Index = () => {
             >
               <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <User className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col">
+                    <span>{user?.name}</span>
+                    <span className="text-xs text-muted-foreground">{user?.email}</span>
+                    <span className="text-xs px-1 mt-1 rounded bg-blue-100 text-blue-800 inline-block w-fit">
+                      {user?.role === 'admin' ? 'Admin' : 'User'}
+                    </span>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => alert('Account settings would go here')}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={logout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>
@@ -60,6 +112,14 @@ const Index = () => {
             Last updated: {airQualityData.timestamp}
           </div>
         </div>
+
+        {/* Admin Dashboard - Only visible to admins */}
+        {isAdmin && (
+          <div className="mb-10">
+            <AdminDashboard />
+            <div className="border-t border-gray-200 my-10"></div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Air Quality Index Card */}
