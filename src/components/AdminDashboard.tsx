@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import DashboardCard from './DashboardCard';
@@ -26,6 +26,19 @@ const AdminDashboard: React.FC = () => {
   const highPollutionLocations = sortedLocations
     .filter(loc => loc.aqi > 100)
     .slice(0, 5);
+
+  // Color mapping for AQI categories
+  const getCategoryColor = (category: string): string => {
+    switch(category) {
+      case 'good': return '#22C55E';
+      case 'moderate': return '#FACC15';
+      case 'unhealthy-sensitive': return '#FB923C';
+      case 'unhealthy': return '#EF4444';
+      case 'very-unhealthy': return '#9F1239';
+      case 'hazardous': return '#7F1D1D';
+      default: return '#8884d8';
+    }
+  };
 
   const handleAddLocation = () => {
     // In a real app, this would add a new location to the database
@@ -95,23 +108,11 @@ const AdminDashboard: React.FC = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar 
-                  dataKey="aqi" 
-                  name="Air Quality Index" 
-                  fill="#8884d8"
-                  // Color bars based on AQI category
-                  fill={(entry) => {
-                    switch(entry.category) {
-                      case 'good': return '#22C55E';
-                      case 'moderate': return '#FACC15';
-                      case 'unhealthy-sensitive': return '#FB923C';
-                      case 'unhealthy': return '#EF4444';
-                      case 'very-unhealthy': return '#9F1239';
-                      case 'hazardous': return '#7F1D1D';
-                      default: return '#8884d8';
-                    }
-                  }}
-                />
+                <Bar dataKey="aqi" name="Air Quality Index">
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={getCategoryColor(entry.category)} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
